@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gomoku Game</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+
+        
+        #anotherboard {
+            grid-template-columns: repeat(14, 30px);
+            grid-template-rows: repeat(14, 30px);
+            position: absolute;
+        }
+
+        #board {
+            grid-template-columns: repeat(15, 30px);
+            grid-template-rows: repeat(15, 30px);
+            padding: 20px;
+        }
+
+        .grid-gapfix{
+            display: grid;
+            gap: 0;
+        }
+
+        #board div {
+            background-color: #c4bbbb;
+            border: 1px solid black;
+        }
+
+        #container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #line{
+            padding: 10px;
+            border: 10px solid black;
+            background-color: #e0ae7e;
+            box-shadow: 5px 5px 10px black;
+        }
+
+        h1{
+            background-color: blue;
+            border-bottom: #e0ae7e 8px solid;
+            text-align: center;
+            margin-bottom: 10px;
+            padding: 5px;
+            color: white;
+        }
+ 
+    </style>
+</head>
+<body>
+    <h1>Gomoku</h1>
+    <div id="container">
+        <div id="line">
+            <div id="board" class="grid-gapfix"></div>
+        </div>
+        <div id="anotherboard" class="grid-gapfix"></div>
+    </div>
+
+    <script>
+        let board = document.getElementById("board");
+        let anotherboard = document.getElementById("anotherboard");
+        let boxes = document.getElementsByClassName("box");
+        let currentPlayer = "black";
+
+        for (let char = 0; char < 15; char++) {
+            for (let num = 0; num < 15; num++) {
+                board.innerHTML +=  ` <div></div> `
+            }
+        }
+        
+        for (let height = 0; height < 14; height++) {
+            for (let length = 0; length < 14; length++) {
+                anotherboard.innerHTML +=  ` <div class="box"></div> `
+            }
+        }
+    
+        for (let count = 0; count < boxes.length; count++) {
+            boxes[count].addEventListener('click', function() {
+                if (this.getAttribute('class').split(" ").length == 1) {
+                    this.setAttribute('class', 'box ' + currentPlayer);
+                    this.style.backgroundColor = currentPlayer;
+                    this.style.borderRadius = "50%";
+                    this.style.opacity = "1";
+                    currentPlayer = currentPlayer == "black" ? "white" : "black";
+                    alert("Player " + currentPlayer + "'s turn");
+                    checkWin();
+                }
+            });
+        }
+    
+        function checkWin() {
+            const lines = [
+                [0, 1, 2, 3, 4],
+                [1, 2, 3, 4, 5],
+                [0, 15, 30, 45, 60],
+                [1, 16, 31, 46, 61],    
+                [0, 16, 32, 48, 64],
+                [4, 18, 32, 46, 60],
+
+                // arrays of combination na kailangan para manalo
+            ];
+    
+            for (let line of lines) {
+                const [input1, input2, input3, input4, input5] = line;
+                if (
+                    boxes[input1].getAttribute("class").includes(currentPlayer) &&
+                    boxes[input2].getAttribute("class").includes(currentPlayer) &&
+                    boxes[input3].getAttribute("class").includes(currentPlayer) &&
+                    boxes[input4].getAttribute("class").includes(currentPlayer) &&
+                    boxes[input5].getAttribute("class").includes(currentPlayer)
+                ) {
+                    alert("Player " + currentPlayer + " wins!");
+                    container.innerHTML = ""
+                }
+            }
+        }
+    </script>
+    
