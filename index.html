@@ -65,10 +65,21 @@
     </div>
 
     <script>
-        let board = document.getElementById("board");
+          let board = document.getElementById("board");
         let anotherboard = document.getElementById("anotherboard");
         let boxes = document.getElementsByClassName("box");
         let currentPlayer = "black";
+        let lines = [
+                [0, 1, 2, 3, 4],
+                [1, 2, 3, 4, 5],
+                [0, 15, 30, 45, 60],
+                [1, 16, 31, 46, 61],    
+                [0, 16, 32, 48, 64],
+                [4, 18, 32, 46, 60],
+
+                //multi arrays of combination na kailangan para manalo
+            ];
+
 
         for (let char = 0; char < 15; char++) {
             for (let num = 0; num < 15; num++) {
@@ -81,44 +92,36 @@
                 anotherboard.innerHTML +=  ` <div class="box"></div> `
             }
         }
+
     
         for (let count = 0; count < boxes.length; count++) {
-            boxes[count].addEventListener('click', function() {
-                if (this.getAttribute('class').split(" ").length == 1) {
-                    this.setAttribute('class', 'box ' + currentPlayer);
+            boxes[count].addEventListener("click", function() {
+                if (!this.style.backgroundColor) {
+                    this.setAttribute("class", "box " + currentPlayer);
                     this.style.backgroundColor = currentPlayer;
                     this.style.borderRadius = "50%";
-                    this.style.opacity = "1";
                     currentPlayer = currentPlayer == "black" ? "white" : "black";
-                    alert("Player " + currentPlayer + "'s turn");
+                    alert("Player " + currentPlayer + "s turn");
                     checkWin();
                 }
             });
         }
-    
-        function checkWin() {
-            const lines = [
-                [0, 1, 2, 3, 4],
-                [1, 2, 3, 4, 5],
-                [0, 15, 30, 45, 60],
-                [1, 16, 31, 46, 61],    
-                [0, 16, 32, 48, 64],
-                [4, 18, 32, 46, 60],
+        
 
-                // arrays of combination na kailangan para manalo
-            ];
-    
+       
+        function checkWin() {
             for (let line of lines) {
-                const [input1, input2, input3, input4, input5] = line;
+                let [input1, input2, input3, input4, input5] = line;
+
                 if (
-                    boxes[input1].getAttribute("class").includes(currentPlayer) &&
-                    boxes[input2].getAttribute("class").includes(currentPlayer) &&
-                    boxes[input3].getAttribute("class").includes(currentPlayer) &&
-                    boxes[input4].getAttribute("class").includes(currentPlayer) &&
-                    boxes[input5].getAttribute("class").includes(currentPlayer)
-                ) {
+                    boxes[input1].style.backgroundColor == currentPlayer &&
+                    boxes[input2].style.backgroundColor == currentPlayer &&
+                    boxes[input3].style.backgroundColor == currentPlayer &&
+                    boxes[input4].style.backgroundColor == currentPlayer &&
+                    boxes[input5].style.backgroundColor == currentPlayer  
+                    ) {
                     alert("Player " + currentPlayer + " wins!");
-                    container.innerHTML = ""
+                    container.innerHTML = "";
                 }
             }
         }
